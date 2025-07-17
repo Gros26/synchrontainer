@@ -1,0 +1,38 @@
+services:
+  contenedor1:
+    build: .
+    container_name: contenedor1
+    volumes:
+      - datos_publicos:/usr/src/app/sync_files/public
+      - datos_privados1:/usr/src/app/sync_files/private
+    networks:
+      - synchrontainer
+    ports:
+      - "3000:5000"
+
+  contenedor2:
+    build: .
+    container_name: contenedor2
+    volumes:
+      - datos_publicos:/usr/src/app/sync_files/public
+      - datos_privados2:/usr/src/app/sync_files/private
+    networks:
+      - synchrontainer
+
+  contenedor3:
+    build: .
+    container_name: contenedor3
+    volumes:
+      - datos_publicos:/usr/src/app/sync_files/public
+      - datos_privados3:/usr/src/app/sync_files/private
+    networks:
+      - synchrontainer
+
+volumes:
+  datos_publicos:
+  datos_privados1:
+  datos_privados2:
+  datos_privados3:
+
+networks:
+  synchrontainer:
