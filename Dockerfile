@@ -6,7 +6,7 @@ WORKDIR /usr/src/app
 COPY ./myapp/ .
 # instalacion de requerimientos y dependencias
 RUN pip3 install -r requirements.txt
-# Aperturo el puerto 3000 del contenedor
-EXPOSE 3000
+# Aperturo el puerto 5000 del contenedor
+EXPOSE 5000
 # Establece el entrypoint
 CMD ["python3", "./app.py"]
