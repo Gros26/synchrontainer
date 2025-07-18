@@ -6,10 +6,10 @@
     <title>Inicilan</title>
 </head>
 <body>
-    
     <p>ver los archivos <a href="{{ url_for('listar_archivos_publicos') }}">publicos</a> </p>
-    {% for archivo in data %}
-        <li>{{ archivo }}</li>
+    {% for clave, valor in data.items() %}
+        <li>{{ clave }}: {{valor}} </li>
+        <p>Ir al <a href="{{ url_for('listar_archivos_contenedor', uid=valor) }}">{{clave}}</a></p>
     {% endfor %}
 
 </body>

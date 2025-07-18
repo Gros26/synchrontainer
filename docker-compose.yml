@@ -3,8 +3,11 @@ services:
     build: .
     container_name: contenedor1
     volumes:
-      - datos_publicos:/usr/src/app/sync_files/public
-      - datos_privados1:/usr/src/app/sync_files/private
+      - ./datos_publicos:/usr/src/app/sync_files/public
+      - ./datos_privados/contenedor1:/usr/src/app/sync_files/private/contenedor1
+      - contenedores:/usr/src/app/sync_files
+    environment:
+      - NOMBRE_CONTENEDOR=contenedor1
     networks:
       - synchrontainer
     ports:
@@ -14,8 +17,11 @@ services:
     build: .
     container_name: contenedor2
     volumes:
-      - datos_publicos:/usr/src/app/sync_files/public
-      - datos_privados2:/usr/src/app/sync_files/private
+      - ./datos_publicos:/usr/src/app/sync_files/public
+      - ./datos_privados/contenedor2:/usr/src/app/sync_files/private/contenedor2
+      - contenedores:/usr/src/app/sync_files
+    environment:
+      - NOMBRE_CONTENEDOR=contenedor2
     networks:
       - synchrontainer
 
@@ -23,16 +29,18 @@ services:
     build: .
     container_name: contenedor3
     volumes:
-      - datos_publicos:/usr/src/app/sync_files/public
-      - datos_privados3:/usr/src/app/sync_files/private
+      - ./datos_publicos:/usr/src/app/sync_files/public
+      - ./datos_privados/contenedor3:/usr/src/app/sync_files/private/contenedor3
+      - contenedores:/usr/src/app/sync_files
+    environment:
+      - NOMBRE_CONTENEDOR=contenedor3
     networks:
       - synchrontainer
 
 volumes:
   datos_publicos:
-  datos_privados1:
-  datos_privados2:
-  datos_privados3:
+  datos_privados:
+  contenedores:
 
 networks:
   synchrontainer:
