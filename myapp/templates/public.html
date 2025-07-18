@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EL publico</title>
+    <title>EL PUBLICOublico</title>
 </head>
 <body>
     <ul>
         {% for archivo in data %}
             <li>{{ archivo }}</li>
         {% endfor %}
+        
+        <p>devolverse al <a href="{{ url_for('index')}}">Index</a> </p>
     </ul>
 </body>
 </html>

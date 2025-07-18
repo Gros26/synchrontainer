@@ -3,29 +3,26 @@ import os
 
 app = Flask(__name__)
 
+uid = os.environ['HOSTNAME']
+
 @app.route('/')
-def hello_world():
-  # return {
-  #   'message': 'hola, Mundo!!!'
-  # }
-  return render_template("index.html")
+def index():
+  contenedores = ['contenedor1', 'contenedor2', 'contenedor3']
+  return render_template("index.html", data=contenedores)
 
 # Esta ruta listara todos los archivos del contenedor <uid>
-@app.route('/storage/<uid>')
+@app.get('/storage/<uid>')
 def listar_archivos_contenedor(uid):
-  return "Aqui iria la template"
+  return render_template("public.html", data=uid)
 
 
 # Esta ruta permitira listar los archivos publicos de la red
-@app.route('/public/')
+@app.get('/public')
 def listar_archivos_publicos():
-  if os.path.exists("/usr/src/app/sync_files/public"):
-    print(f"La ruta '{"/usr/src/app/sync_files/public"}' existe.")
-  else:
-    print(f"La ruta '{"/usr/src/app/sync_files/public"}' no existe.")
   archivos = os.listdir("/usr/src/app/sync_files/public") # ruta dentro del contenedor
   print(archivos)
   return render_template("public.html", data=archivos)
+
 
 @app.route('/despedirse')
 def bye_world():
