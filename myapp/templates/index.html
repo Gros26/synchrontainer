@@ -9,7 +9,7 @@
     <p>ver los archivos <a href="{{ url_for('listar_archivos_publicos') }}">publicos</a> </p>
     {% for clave, valor in data.items() %}
         <li>{{ clave }}: {{valor}} </li>
-        <p>Ir al <a href="{{ url_for('listar_archivos_contenedor', uid=valor) }}">{{clave}}</a></p>
+        <p>Ir al <a href="{{ url_for('listar_archivos_privados', uid=valor) }}">{{clave}}</a></p>
     {% endfor %}
 
 </body>
