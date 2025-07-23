@@ -68,17 +68,30 @@ def listar_archivos_contenedor(nombre):
 #Aqui llamamos al endpoint anterior para traer la lista 
 @app.route('/storage/<uid>')
 def listar_archivos_privados(uid):
-    # Siempre usar la carpeta privada local del contenedor actual
-    carpeta = os.path.join(PRIVATE_DIR, NOMBRE_CONTENEDOR)
+    # Usar el uid del parámetro para la carpeta
+    carpeta = os.path.join(PRIVATE_DIR, uid)
     if not os.path.exists(carpeta):
         archivos = []
     else:
         archivos = os.listdir(carpeta)
+    
+    # Buscar el nombre del contenedor basado en el uid
+    contenedores = listar_contenedores()
+    nombre_contenedor = None
+    for nombre, uid_registrado in contenedores.items():
+        if uid_registrado == uid:
+            nombre_contenedor = nombre
+            break
+    
+    # Si no se encuentra el nombre, usar el uid 
+    if nombre_contenedor is None:
+        nombre_contenedor = uid
+    
     # Si la petición espera JSON, devolvemos JSON
     if request.accept_mimetypes['application/json'] >= request.accept_mimetypes['text/html']:
         return jsonify(archivos)
-    # Si espera HTML, renderizamos la plantilla
-    return render_template("storage_uid.html", nombre=NOMBRE_CONTENEDOR, archivos=archivos, error=None)
+    # Si espera HTML, renderizamos la plantilla con el nombre del contenedor
+    return render_template("storage_uid.html", nombre=nombre_contenedor, archivos=archivos, error=None)
 
 
 # Esta ruta permitira listar los archivos publicos de la red
@@ -97,8 +110,8 @@ def descargar_archivo_publico(filename):
 
 @app.route('/upload/<uid>/<filename>', methods=['GET', 'POST'])
 def upload_archivo_privado(uid, filename):
-    # Siempre usar la carpeta privada local del contenedor actual
-    carpeta_destino = os.path.join(PRIVATE_DIR, NOMBRE_CONTENEDOR)
+    # Usar el uid del parámetro para la carpeta destino
+    carpeta_destino = os.path.join(PRIVATE_DIR, uid)
     os.makedirs(carpeta_destino, exist_ok=True)
     if request.method == 'POST':
         if 'file' not in request.files:
@@ -120,7 +133,7 @@ def upload_archivo_privado(uid, filename):
       <input type=file name=file>
       <input type=submit value=Subir>
     </form>
-    '''.format(NOMBRE_CONTENEDOR)
+    '''.format(uid)
 
 
 @app.route('/upload/public/<filename>', methods=['GET', 'POST'])
@@ -171,9 +184,10 @@ os.makedirs(REGISTRO_DIR, exist_ok=True)
 
 @app.route('/download/private/<uid>/<filename>')
 def descargar_archivo_privado(uid, filename):
-    # Siempre usar la carpeta privada local del contenedor actual
-    carpeta_origen = os.path.join(PRIVATE_DIR, NOMBRE_CONTENEDOR)
+    # Usar el uid del parámetro para la carpeta origen
+    carpeta_origen = os.path.join(PRIVATE_DIR, uid)
     return send_from_directory(carpeta_origen, filename, as_attachment=True)
+
 
 if __name__ == '__main__':
   # Registrar contenedor al iniciar
