@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio</title>
+    <title>Despedida</title>
     <!-- Enlace al CSS global -->
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
@@ -12,14 +12,8 @@
         <a href="{{ url_for('index') }}">Inicio</a> |
         <a href="{{ url_for('listar_archivos_publicos') }}">Archivos públicos</a>
     </nav>
-    <h1>Contenedores registrados</h1>
-    <ul>
-    {% for clave, valor in data.items() %}
-        <li>
-            <strong>{{ clave }}</strong> (UID: {{valor}})
-            <a class="btn" href="{{ url_for('listar_archivos_privados', uid=valor) }}">Ver archivos privados</a>
-        </li>
-    {% endfor %}
-    </ul>
+    <h1>¡Adiós, mundo!</h1>
+    <p>Gracias por visitar la aplicación. ¡Hasta pronto!</p>
+    <a class="btn" href="{{ url_for('index') }}">Volver al inicio</a>
 </body>
-</html>
+</html> 

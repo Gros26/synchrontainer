@@ -1,12 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentosa</title>
+    <title>Archivos privados de {{ nombre }}</title>
+    <!-- Enlace al CSS global -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    aqui esta
-    {{ data }}
+    <nav>
+        <a href="{{ url_for('index') }}">Inicio</a> |
+        <a href="{{ url_for('listar_archivos_publicos') }}">Archivos públicos</a>
+    </nav>
+    <h1>Archivos privados de {{ nombre }}</h1>
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% else %}
+        <form action="{{ url_for("upload_archivo_privado", uid=request.view_args["uid"], filename="nuevo_archivo.txt") }}" method="post" enctype="multipart/form-data">
+            <label style="width:100%;text-align:center;">Subir archivo privado</label>
+            <input type="file" name="file" required>
+            <input type="text" name="nombre" placeholder="Nombre para guardar (ej: archivo.txt)" required>
+            <button type="submit" class="btn">Subir</button>
+        </form>
+        <ul>
+            {% for archivo in archivos %}
+                <li>{{ archivo }}
+                    <a class="btn" href="{{ url_for('descargar_archivo_privado', uid=request.view_args['uid'], filename=archivo) }}">Descargar</a>
+                </li>
+            {% else %}
+                <li style="text-align:center;width:100%;">No hay archivos privados para este contenedor.</li>
+            {% endfor %}
+        </ul>
+        <script>
+        // Cambia la acción del formulario según el nombre ingresado
+        document.querySelector('form').addEventListener('submit', function(e) {
+            var nombre = document.querySelector('input[name="nombre"]').value;
+            var uid = '{{ request.view_args["uid"] }}';
+            this.action = '/upload/' + encodeURIComponent(uid) + '/' + encodeURIComponent(nombre);
+        });
+        </script>
+    {% endif %}
+    <a class="btn" href="{{ url_for('index') }}">Volver al inicio</a>
 </body>
 </html>

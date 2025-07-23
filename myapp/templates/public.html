@@ -1,16 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EL PUBLICOublico</title>
+    <title>Archivos públicos</title>
+    <!-- Enlace al CSS global -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+    <nav>
+        <a href="{{ url_for('index') }}">Inicio</a> |
+        <a href="{{ url_for('listar_archivos_publicos') }}">Archivos públicos</a>
+    </nav>
+    <h1>Archivos públicos</h1>
+    <form action="{{ url_for('upload_archivo_publico', filename='nuevo_archivo.txt') }}" method="post" enctype="multipart/form-data">
+        <label style="width:100%;text-align:center;">Subir archivo público</label>
+        <input type="file" name="file" required>
+        <input type="text" name="nombre" placeholder="Nombre para guardar (ej: archivo.txt)" required>
+        <button type="submit" class="btn">Subir</button>
+    </form>
     <ul>
-        funciona mi papa
-            <li>{{ data }}</li>
-        
-        <p>devolverse al <a href="{{ url_for('index')}}">Index</a> </p>
+        {% for archivo in data %}
+            <li>{{ archivo }}
+                <a class="btn" href="{{ url_for('descargar_archivo_publico', filename=archivo) }}">Descargar</a>
+            </li>
+        {% else %}
+            <li style="text-align:center;width:100%;">No hay archivos públicos disponibles.</li>
+        {% endfor %}
     </ul>
+    <a class="btn" href="{{ url_for('index') }}">Volver al inicio</a>
+    <script>
+    // Cambia la acción del formulario según el nombre ingresado
+    document.querySelector('form').addEventListener('submit', function(e) {
+        var nombre = document.querySelector('input[name="nombre"]').value;
+        this.action = '/upload/public/' + encodeURIComponent(nombre);
+    });
+    </script>
 </body>
 </html>

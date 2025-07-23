@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archivos de {{ nombre }}</title>
+    <!-- Enlace al CSS global -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav>
+        <a href="{{ url_for('index') }}">Inicio</a> |
+        <a href="{{ url_for('listar_archivos_publicos') }}">Archivos públicos</a>
+    </nav>
+    <h1>Archivos de {{ nombre }}</h1>
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% else %}
+        {% if archivos %}
+            <ul>
+                {% for archivo in archivos %}
+                    <li>{{ archivo }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No hay archivos para este contenedor.</p>
+        {% endif %}
+    {% endif %}
+    <a class="btn" href="{{ url_for('index') }}">Volver al inicio</a>
+</body>
+</html> 
