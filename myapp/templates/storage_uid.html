@@ -16,7 +16,8 @@
     {% if error %}
         <p style="color:red;">{{ error }}</p>
     {% else %}
-        <form action="{{ url_for("upload_archivo_privado", uid=request.view_args["uid"], filename="nuevo_archivo.txt") }}" method="post" enctype="multipart/form-data">
+        <!-- En lugar de url_for sólo, construimos la URL completa al contenedor destino -->
+        <form id="uploadForm" action="#" method="post" enctype="multipart/form-data">
             <label style="width:100%;text-align:center;">Subir archivo privado</label>
             <input type="file" name="file" required>
             <input type="text" name="nombre" placeholder="Nombre para guardar (ej: archivo.txt)" required>
@@ -32,11 +33,23 @@
             {% endfor %}
         </ul>
         <script>
-        // Cambia la acción del formulario según el nombre ingresado
-        document.querySelector('form').addEventListener('submit', function(e) {
-            var nombre = document.querySelector('input[name="nombre"]').value;
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var nombreArchivo = document.querySelector('input[name="nombre"]').value;
             var uid = '{{ request.view_args["uid"] }}';
-            this.action = '/upload/' + encodeURIComponent(uid) + '/' + encodeURIComponent(nombre);
+            var container = '{{ nombre }}';
+            // Mapeo de contenedor → puerto expuesto en el host
+            var portMap = {
+              'contenedor1': 3000,
+              'contenedor2': 3001,
+              'contenedor3': 3002
+            };
+            var port = portMap[container] || 5000;
+            // Construye la URL usando localhost y el puerto mapeado
+            this.action = 'http://localhost:' + port + '/upload/' +
+                          encodeURIComponent(uid) + '/' +
+                          encodeURIComponent(nombreArchivo);
+            this.submit();
         });
         </script>
     {% endif %}
